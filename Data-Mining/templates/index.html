@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Data Mining Project</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="formstyles.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <h1>Fill out details</h1>
+  <div id="form-cont">
+  	<h4>Runs</h4>
+  	<input name="runs" type="text" placeholder="Runs" />
+  	<h4>Wickets</h4>
+  	<input name="wickets" type="text" placeholder="Wickets" />
+  	<h4>Overs</h4>
+  	<input name="overs" type="text" placeholder="Overs" />
+  	<h4>Striker</h4>
+  	<input name="striker" type="text" placeholder="Striker" />
+  	<h4>Non-striker</h4>
+  	<input name="non-striker" type="text" placeholder="Non-striker" />
+
+  	<button class="btn btn-lg btn-light btn-outline " onclick="handleFormSubmit()"> Submit </button>
+  </div>
+  <h4>Output</h4>
+  <input type="text"  id="total"/>
+
+  <script type="text/javascript">
+  	function handleFormSubmit(argument) {
+
+  		var data = {}
+
+  		var d = document.getElementById('form-cont')
+
+  		// inputElems is array of ref to each input field
+		var inputElems = d.querySelectorAll('input')
+
+		inputElems.forEach( e => {
+			data[e.name] = e.value
+		})
+
+		// console.log(data)
+
+		fetch('/predict', {
+		  method: 'POST', // or 'PUT'
+		  headers: {
+		    'Content-Type': 'application/json',
+		  },
+		  body: JSON.stringify(data),
+		})
+		.then((response) => response.json())
+		.then((data) => {
+		  console.log('Success:', data);
+		  var resultBox = document.getElementById('total')
+
+		  resultBox.value = data.result
+		  // resultBox.innerHTML = data.result
+		  // resultBox.style.color = 'black'
+
+		  // d.appendChild(resultBox)
+		})
+		.catch((error) => {
+		  console.error('Error:', error);
+		});
+  	}
+  </script>
+</body>
+
+</html>
